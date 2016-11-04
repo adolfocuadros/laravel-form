@@ -1,0 +1,18 @@
+{
+  "name": "adolfocuadros/laravel-form",
+  "description": "Generador de formularios para Laravel",
+  "type": "package",
+  "require": {
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Adolfo Cuadros",
+      "email": "ronnie.adolfo@gmail.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "autoload": {
+    "psr-4": { "Adolfocuadros\\LaravelForm\\": "src/" }
+  }
+}
