@@ -4,53 +4,105 @@ namespace Adolfocuadros\LaravelForm;
 
 class Form
 {
-    public $inputs = [
-        [
-            'name'      =>  'Apellido Paterno',
-            'type'      =>  'text',
-            'class_col' =>  'col-md-4',
-            'vue_data'  =>  'persona.apPaterno',
-            'id'        =>  'apPaterno',
-            'required'  =>  true,
-            'error_show'=>  false,
-            'more_attr' =>  ':readonly="flags.existePersona"'
-        ]
-    ];
+    protected $inputs = [];
+
+    protected $title = 'Titulo';
+    protected $action = '';
+    protected $vueAction = '';
+    protected $inputsOnly = true;
     
-    private $buffer = '';
+    public $buffer = '';
 
-    public function __construct()
+    public function __construct($inputsOnly = true)
     {
-
+        $this->inputsOnly = $inputsOnly;
     }
 
-    public function render() {}
+    public static function generate($inputsOnly = true) {
+        $thisClass = get_called_class();
+        $form = new $thisClass($inputsOnly);
+        $form->render();
+        return $form->getGenerate();
+    }
 
-    public function addInput(array $data) {
-        $name = !empty($data['name']) ? $data['name'] : 'Input';
-        $type = !empty($data['type']) ? $data['type'] : 'text';
-        $classCol = !empty($data['class_col']) ? $data['class_col'] : 'col-sm-12';
-        $vueData = !empty($data['vue_data']) ? $data['vue_data'] : null;
-        $id = !empty($data['id']) ? $data['id'] : null;
-        $required = !empty($data['required']) ? $data['required'] : false;
-        $errorShow = !empty($data['error_show']) ? $data['error_show'] : false;
-        $moreAttr = !empty($data['more_attr']) ? ' '.$data['more_attr'] : '';
+    public function render() {
+        for ($i = 0; $i < count($this->inputs); $i++) {
+            if(isset($this->inputs[$i]['type']) && $this->inputs[$i]['type'] == 'select') {
+                $this->addSelect($this->inputs[$i]);
+            } else {
+                $this->addInput($this->inputs[$i]);
+            }
+        }
+    }
 
-        $this->buffer .= '<div class="'.$classCol.'" '.($errorShow ? 'v-bind:class="{\'has-error\' : error.'.$vueData.' != null}"':'').'>
-        <div class="sg-group">
-            <div class="input-group input-group-sm">
-                <label '.($id != null ? 'for="'.$id.'" ' : '').'class="input-group-addon text-bold">'.($required ? '<span class="text-red">(*)</span> ':'').$name.':</label>
-                <input type="'.$type.'" class="form-control" '.($id != null ? 'id="'.$id.'" ' : '').'placeholder="'.$name.'" v-model="'.$vueData.'"'.$moreAttr.'>
-            </div>
-            '.($errorShow ? '<span class="help-block" v-if="error.'.$vueData.' != null">{{ error.'.$vueData.' }}</span>':'').'
+    public function addInput(array $data)
+    {
+        $name       = !empty($data['name']) ? $data['name'] : 'Input';
+        $type       = !empty($data['type']) ? $data['type'] : 'text';
+        $classCol   = !empty($data['class_col']) ? $data['class_col'] : 'col-sm-12';
+        $vueModel    = !empty($data['vue_model']) ? $data['vue_model'] : null;
+        $id         = !empty($data['id']) ? $data['id'] : null;
+        $required   = !empty($data['required']) ? $data['required'] : false;
+        $errorShow  = !empty($data['error_show']) ? $data['error_show'] : false;
+        $moreAttr   = !empty($data['more_attr']) ? ' '.$data['more_attr'] : '';
+        $value      = !empty($data['value']) ? $data['value'] : '';
+
+        $this->buffer .= '<div class="'.$classCol.'" '.($errorShow ? 'v-bind:class="{\'has-error\' : error.'.$vueModel.' != null}"':'').'>
+    <div class="sg-group">
+        <div class="input-group input-group-sm">
+            <label '.($id != null ? 'for="'.$id.'" ' : '').'class="input-group-addon text-bold">'.($required ? '<span class="text-red">(*)</span> ':'').$name.':</label>
+            <input type="'.$type.'" class="form-control" '.($id != null ? 'id="'.$id.'" ' : '').'placeholder="'.$name.'" '.($value ? 'value="'.$value.'"':'').' '.($vueModel != null ? 'v-model="'.$vueModel.'"' : '').$moreAttr.'>
         </div>
-    </div>';
+        '.($errorShow ? '<span class="help-block" v-if="error.'.$vueModel.' != null">{{ error.'.$vueModel.' }}</span>':'').'
+    </div>
+</div>';
     }
 
     public function addTextArea() {}
 
-    public function addSelect() {}
+    public function addSelect(array $data)
+    {
+        $name       = !empty($data['name']) ? $data['name'] : 'Input';
+        $classCol   = !empty($data['class_col']) ? $data['class_col'] : 'col-sm-12';
+        $vueModel    = !empty($data['vue_model']) ? $data['vue_model'] : null;
+        $id         = !empty($data['id']) ? $data['id'] : null;
+        $required   = !empty($data['required']) ? $data['required'] : false;
+        $errorShow  = !empty($data['error_show']) ? $data['error_show'] : false;
+        $moreAttr   = !empty($data['more_attr']) ? ' '.$data['more_attr'] : '';
+        $options    = !empty($data['options']) ? $data['options'] : [];
+        $add        = !empty($data['add']) ? $data['add'] : null;
+
+        $this->buffer .= '<div class="'.$classCol.'" '.($errorShow ? 'v-bind:class="{\'has-error\' : error.'.$vueModel.' != null}"':'').'>
+    <div class="sg-group">
+        <div class="input-group input-group-sm">
+            <label '.($id != null ? 'for="'.$id.'" ' : '').'class="input-group-addon text-bold">'.($required ? '<span class="text-red">(*)</span> ':'').$name.': </label>
+            <select class="form-control" '.($vueModel != null ? 'v-model="'.$vueModel.'"' : '').$moreAttr.'>';
+
+        foreach ($options as $option) {
+            $this->buffer .= '<option '.(!empty($option['v_for']) ? 'v-for="'.$option['v_for'].'"' : '').' '.(!empty($option['value']) ? 'value="'.$option['value'].'"' : '').'>'.$option['name'].'</option>';
+        }
+
+        $this->buffer .= '</select>
+            '.($add != null ? '<span class="input-group-btn">
+                <button type="button" class="btn btn-xs btn-info" @click="'.$add.'"><i class="fa fa-plus"></i></button>
+            </span>' : '').'
+        </div>
+        '.($errorShow ? '<span class="help-block" v-if="error.'.$vueModel.' != null">{{ error.'.$vueModel.' }}</span>':'').'
+    </div>
+</div>';
+    }
 
     public function addButton() {}
+
+    public function setInputs($inputs) {
+        $this->inputs = $inputs;
+    }
+
+    public function getGenerate() {
+        if($this->inputsOnly == true) {
+            return $this->buffer;
+        }
+        return '';
+    }
 
 }
