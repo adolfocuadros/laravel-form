@@ -10,7 +10,7 @@ class Form
     protected $action = '';
     protected $vueAction = '';
     protected $inputsOnly = true;
-    
+
     public $buffer = '';
 
     public function __construct($inputsOnly = true)
@@ -51,7 +51,7 @@ class Form
     <div class="sg-group">
         <div class="input-group input-group-sm">
             <label '.($id != null ? 'for="'.$id.'" ' : '').'class="input-group-addon text-bold">'.($required ? '<span class="text-red">(*)</span> ':'').$name.':</label>
-            <input type="'.$type.'" class="form-control" '.($id != null ? 'id="'.$id.'" ' : '').'placeholder="'.$name.'" '.($value ? 'value="'.$value.'"':'').' '.($vueModel != null ? 'v-model="'.$vueModel.'"' : '').$moreAttr.'>
+            <input type="'.$type.'" class="form-control" '.($id != null ? 'id="'.$id.'" ' : '').'placeholder="'.$name.'" '.($value ? 'value="'.$value.'"':'').' '.($required?'required ':'').($vueModel != null ? 'v-model="'.$vueModel.'"' : '').$moreAttr.'>
         </div>
         '.($errorShow ? '<span class="help-block" v-if="error.'.$vueModel.' != null">{{ error.'.$vueModel.' }}</span>':'').'
     </div>
@@ -76,7 +76,7 @@ class Form
     <div class="sg-group">
         <div class="input-group input-group-sm">
             <label '.($id != null ? 'for="'.$id.'" ' : '').'class="input-group-addon text-bold">'.($required ? '<span class="text-red">(*)</span> ':'').$name.': </label>
-            <select class="form-control" '.($vueModel != null ? 'v-model="'.$vueModel.'"' : '').$moreAttr.'>';
+            <select class="form-control" '.($vueModel != null ? 'v-model="'.$vueModel.'"' : '').($required?' required':'').$moreAttr.'>';
 
         foreach ($options as $option) {
             $this->buffer .= '<option '.(!empty($option['v_for']) ? 'v-for="'.$option['v_for'].'"' : '').' '.(!empty($option['value']) ? 'value="'.$option['value'].'"' : '').'>'.$option['name'].'</option>';
