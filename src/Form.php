@@ -46,14 +46,15 @@ class Form
         $errorShow  = !empty($data['error_show']) ? $data['error_show'] : false;
         $moreAttr   = !empty($data['more_attr']) ? ' '.$data['more_attr'] : '';
         $value      = !empty($data['value']) ? $data['value'] : '';
+        $errorModel = !empty($data['error_model']) ? $data['error_model'] : $vueModel;
 
-        $this->buffer .= '<div class="'.$classCol.'" '.($errorShow ? 'v-bind:class="{\'has-error\' : error.'.$vueModel.' != null}"':'').'>
+        $this->buffer .= '<div class="'.$classCol.'" '.($errorShow ? 'v-bind:class="{\'has-error\' : error.'.$errorModel.' != null}"':'').'>
     <div class="sg-group">
         <div class="input-group input-group-sm">
             <label '.($id != null ? 'for="'.$id.'" ' : '').'class="input-group-addon text-bold">'.($required ? '<span class="text-red">(*)</span> ':'').$name.':</label>
             <input type="'.$type.'" class="form-control" '.($id != null ? 'id="'.$id.'" ' : '').'placeholder="'.$name.'" '.($value ? 'value="'.$value.'"':'').' '.($required?'required ':'').($vueModel != null ? 'v-model="'.$vueModel.'"' : '').$moreAttr.'>
         </div>
-        '.($errorShow ? '<span class="help-block" v-if="error.'.$vueModel.' != null">{{ error.'.$vueModel.' }}</span>':'').'
+        '.($errorShow ? '<span class="help-block" v-if="error.'.$errorModel.' != null">{{ error.'.$errorModel.' }}</span>':'').'
     </div>
 </div>';
     }
@@ -71,8 +72,9 @@ class Form
         $moreAttr   = !empty($data['more_attr']) ? ' '.$data['more_attr'] : '';
         $options    = !empty($data['options']) ? $data['options'] : [];
         $add        = !empty($data['add']) ? $data['add'] : null;
+        $errorModel = !empty($data['error_model']) ? $data['error_model'] : $vueModel;
 
-        $this->buffer .= '<div class="'.$classCol.'" '.($errorShow ? 'v-bind:class="{\'has-error\' : error.'.$vueModel.' != null}"':'').'>
+        $this->buffer .= '<div class="'.$classCol.'" '.($errorShow ? 'v-bind:class="{\'has-error\' : error.'.$errorModel.' != null}"':'').'>
     <div class="sg-group">
         <div class="input-group input-group-sm">
             <label '.($id != null ? 'for="'.$id.'" ' : '').'class="input-group-addon text-bold">'.($required ? '<span class="text-red">(*)</span> ':'').$name.': </label>
@@ -87,7 +89,7 @@ class Form
                 <button type="button" class="btn btn-xs btn-info" @click="'.$add.'"><i class="fa fa-plus"></i></button>
             </span>' : '').'
         </div>
-        '.($errorShow ? '<span class="help-block" v-if="error.'.$vueModel.' != null">{{ error.'.$vueModel.' }}</span>':'').'
+        '.($errorShow ? '<span class="help-block" v-if="error.'.$errorModel.' != null">{{ error.'.$errorModel.' }}</span>':'').'
     </div>
 </div>';
     }
