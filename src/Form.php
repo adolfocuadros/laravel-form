@@ -41,6 +41,7 @@ class Form
         $type       = !empty($data['type']) ? $data['type'] : 'text';
         $classCol   = !empty($data['class_col']) ? $data['class_col'] : 'col-sm-12';
         $vueModel    = !empty($data['vue_model']) ? $data['vue_model'] : null;
+        $vueIf      = !empty($data['v-if']) ? $data['v-if'] : null;
         $id         = !empty($data['id']) ? $data['id'] : null;
         $required   = !empty($data['required']) ? $data['required'] : false;
         $errorShow  = !empty($data['error_show']) ? $data['error_show'] : false;
@@ -48,7 +49,7 @@ class Form
         $value      = !empty($data['value']) ? $data['value'] : '';
         $errorModel = !empty($data['error_model']) ? $data['error_model'] : $vueModel;
 
-        $this->buffer .= '<div class="'.$classCol.'" '.($errorShow ? 'v-bind:class="{\'has-error\' : error.'.$errorModel.' != null}"':'').'>
+        $this->buffer .= '<div '.($vueIf != null ? 'v-if="'.$vueIf.'" ' : '').'class="'.$classCol.'" '.($errorShow ? 'v-bind:class="{\'has-error\' : error.'.$errorModel.' != null}"':'').'>
     <div class="sg-group">
         <div class="input-group input-group-sm">
             <label '.($id != null ? 'for="'.$id.'" ' : '').'class="input-group-addon text-bold">'.($required ? '<span class="text-red">(*)</span> ':'').$name.':</label>
@@ -65,7 +66,8 @@ class Form
     {
         $name       = !empty($data['name']) ? $data['name'] : 'Input';
         $classCol   = !empty($data['class_col']) ? $data['class_col'] : 'col-sm-12';
-        $vueModel    = !empty($data['vue_model']) ? $data['vue_model'] : null;
+        $vueModel   = !empty($data['vue_model']) ? $data['vue_model'] : null;
+        $vueIf      = !empty($data['v-if']) ? $data['v-if'] : null;
         $id         = !empty($data['id']) ? $data['id'] : null;
         $required   = !empty($data['required']) ? $data['required'] : false;
         $errorShow  = !empty($data['error_show']) ? $data['error_show'] : false;
@@ -74,7 +76,7 @@ class Form
         $add        = !empty($data['add']) ? $data['add'] : null;
         $errorModel = !empty($data['error_model']) ? $data['error_model'] : $vueModel;
 
-        $this->buffer .= '<div class="'.$classCol.'" '.($errorShow ? 'v-bind:class="{\'has-error\' : error.'.$errorModel.' != null}"':'').'>
+        $this->buffer .= '<div '.($vueIf != null ? 'v-if="'.$vueIf.'" ' : '').'class="'.$classCol.'" '.($errorShow ? 'v-bind:class="{\'has-error\' : error.'.$errorModel.' != null}"':'').'>
     <div class="sg-group">
         <div class="input-group input-group-sm">
             <label '.($id != null ? 'for="'.$id.'" ' : '').'class="input-group-addon text-bold">'.($required ? '<span class="text-red">(*)</span> ':'').$name.': </label>
