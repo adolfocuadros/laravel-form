@@ -83,7 +83,7 @@ class Form
             <select class="form-control" '.($vueModel != null ? 'v-model="'.$vueModel.'"' : '').($required?' required':'').$moreAttr.'>';
 
         foreach ($options as $option) {
-            $this->buffer .= '<option '.(!empty($option['v_for']) ? 'v-for="'.$option['v_for'].'"' : '').' '.(!empty($option['value']) ? 'value="'.$option['value'].'"' : '').'>'.$option['name'].'</option>';
+            $this->buffer .= '<option '.(!empty($option['v_for']) ? 'v-for="'.$option['v_for'].'"' : '').' '.(isset($option['value']) ? 'value="'.$option['value'].'"' : '').'>'.$option['name'].'</option>';
         }
 
         $this->buffer .= '</select>
