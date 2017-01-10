@@ -88,7 +88,7 @@ class Form
 
         $this->buffer .= '</select>
             '.($add != null ? '<span class="input-group-btn">
-                <button type="button" class="btn btn-xs btn-info" @click="'.$add.'"><i class="fa fa-plus"></i></button>
+                <a class="btn btn-xs btn-info" @click="'.$add.'"><i class="fa fa-plus"></i></a>
             </span>' : '').'
         </div>
         '.($errorShow ? '<span class="help-block" v-if="error.'.$errorModel.' != null">{{ error.'.$errorModel.' }}</span>':'').'
